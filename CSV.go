@@ -30,11 +30,15 @@ func (c *CSV) Setl(l []string) {
 // Getl returns the list of values in the CSV.
 func (c  CSV) Getl() (sl []string) {
 	var r   *csv.Reader
+	var i    int
 	var err  error
 	r = csv.NewReader(strings.NewReader(string(c)))
 	sl = []string{}
 	sl, err = r.Read()
 	if err != nil && err.Error() != "EOF" { panic(err) }
+	for i = range sl {
+		sl[i] = strings.TrimSpace(sl[i])
+	}
 	return
 }
 
