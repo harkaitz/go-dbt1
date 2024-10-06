@@ -20,12 +20,33 @@ func (c CSV) Contains(s string) bool {
 // Setl sets the CSV to the given list of values.
 func (c *CSV) Setl(l []string) {
 	var w *csv.Writer
-	var b []byte
-	w = csv.NewWriter(bytes.NewBuffer(b))
+	var b *bytes.Buffer = bytes.NewBuffer([]byte{})
+	w = csv.NewWriter(b)
 	w.Write(l)
 	w.Flush()
-	*c = CSV(b)
+	*c = CSV(b.Bytes())
 }
+
+// Add adds a field to CSV.
+func (c *CSV) Add(n ...string) {
+	l := c.Getl()
+	l = append(l, n...)
+	c.Setl(l)
+}
+
+// Del deletes a field.
+func (c *CSV) Del(n string) {
+	l1 := c.Getl()
+	l2 := []string{}
+	for _, s := range l1 {
+		if s != n {
+			l2 = append(l2, s)
+		}
+	}
+	c.Setl(l2)
+}
+
+
 
 // Getl returns the list of values in the CSV.
 func (c  CSV) Getl() (sl []string) {
